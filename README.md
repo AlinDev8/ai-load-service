@@ -11,25 +11,44 @@ AI Load Service - Высоконагруженный сервис аналити
 ✅ Мониторинг с Prometheus/Grafana
 
 📁 Структура проекта
-ai-load-service/
+ai-load-service/ 
+
 ├── cmd/
-│   └── main.go
+
+└── main.go
+
 ├── backup
+
 ├── internal/
+
 │   ├── handlers/
+
 │   │   └── metrics.go
+
 │   ├── analytics/
+
 │   │   └── analyzer.go
+
 │   └── storage/
+
 │       └── redis.go
+
 ├── deployments/
+
 │   ├── redis-deployment.yaml
+
 │   └── app-deployment.yaml
+
 ├── loadtest.js
+
 ├── Dockerfile
+
 ├── go.mod
+
 ├── go.sum
+
 ├── k6-loadtest.js
+
 └── README.md
 
 Cтарт программы
@@ -85,9 +104,9 @@ choco install k6 -y
 k6 run tests/loadtest.js
 
 # Параметры теста:
-# - Длительность: 70 секунд
-# - Максимум: 50 виртуальных пользователей
-# - Цель: >1000 RPS
+ - Длительность: 70 секунд
+ - Максимум: 50 виртуальных пользователей
+ - Цель: >1000 RPS
 Метрики производительности
 Метрика	Целевое значение	Результат
 RPS	>1000	1250
@@ -102,10 +121,10 @@ bash
 curl http://localhost:8080/metrics
 
 # Пример метрик:
-# - requests_total{endpoint,method,status}
-# - request_duration_seconds
-# - anomaly_detection_total
-# - rolling_average_current
+ - requests_total{endpoint,method,status}
+ - request_duration_seconds
+ - anomaly_detection_total
+ - rolling_average_current
 Grafana Dashboard
 bash
 # Установка
