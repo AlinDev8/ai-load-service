@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-load-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ai-load-service
+  template:
+    metadata:
+      labels:
+        app: ai-load-service
+    spec:
+      containers:
+      - name: app
+        image: ai-load-service:with-analyze
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: REDIS_HOST
+          value: "redis-service"
+        - name: REDIS_PORT
+          value: "6379"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-load-service
+spec:
+  type: NodePort 
+  selector:
+    app: ai-load-service
+  ports:
+  - port: 80
+    targetPort: 8080
+    # nodePort: 30000  ????? ??????????? (???? ?? ????????)
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ai-load-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ai-load-service
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70

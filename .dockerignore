@@ -1,0 +1,11 @@
+﻿.git
+.gitignore
+Dockerfile
+.dockerignore
+*.md
+vendor/
+bin/
+tmp/
+test*
+*.test
+*.exe
